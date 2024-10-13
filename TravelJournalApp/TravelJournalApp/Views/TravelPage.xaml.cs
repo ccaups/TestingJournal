@@ -5,14 +5,14 @@ namespace TravelJournalApp.Views
 {
     public partial class TravelPage : ContentPage
     {
-        public ListViewModel Vm => BindingContext as ListViewModel;
+        public ViewModel Vm => BindingContext as ViewModel;
 
         public TravelPage()
         {
             InitializeComponent();
 
             // ViewModel-i sidumine
-            BindingContext = new ListViewModel(); 
+            BindingContext = new ViewModel(); 
         }
 
         protected override void OnAppearing()
