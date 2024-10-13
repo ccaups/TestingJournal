@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TravelJournalApp.Views.StartPage"
+             Title="Travel Journal App">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="{StaticResource BlueBG}"
+                      Offset="0.1" />
+            <GradientStop Color="{StaticResource YellowBG}"
+                      Offset="0.6" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid IgnoreSafeArea="{OnPlatform Android=False, iOS=True}">
+        <Grid>
+            <!-- StartPage Image initially placed in the bottom-right corner -->
+            <Image 
+        x:Name="imgIcon"
+        Opacity="0"
+        Source="camping.png"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        WidthRequest="96"
+        HeightRequest="96"
+        Scale="4"/>
+        </Grid>
+
+
+        <Grid>
+            <!-- StartPage Image initially placed in the bottom-right corner -->
+            <Image 
+        x:Name="imgTrain"
+        Opacity="100"
+        Source="train.png"
+        VerticalOptions="Start"
+        HorizontalOptions="End"
+        TranslationX="0"
+        TranslationY="750"
+        Scale="2"/>
+        </Grid>
+
+        <Grid>
+            <!-- StartPage Image initially placed in the bottom-right corner -->
+            <Image 
+        x:Name="imgAirplane"
+        Opacity="100"
+        Source="flying_airplane.png"
+        VerticalOptions="End"
+        HorizontalOptions="End"
+        TranslationX="0"
+        TranslationY="0"
+        WidthRequest="96"
+        HeightRequest="96"
+        Scale="2"
+        Rotation="13"/>
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
