@@ -18,7 +18,6 @@ namespace TravelJournalApp.Models
         public bool isRefreshing;
         private int _selectedImageIndex;
         private string _selectedImagePath;
-        public int ImageIndex { get; set; }
 
         public ObservableCollection<ImageDatabase> TravelImages
         {
@@ -114,32 +113,10 @@ namespace TravelJournalApp.Models
                 {
                     _selectedImageIndex = value;
                     OnPropertyChanged(nameof(SelectedImageIndex));
-                    // OnPropertyChanged(nameof(TravelImages)); // Ei pea seda vajalikuks muutma
                     OnPropertyChanged(nameof(TravelImages)); // Käivita TravelImages omaduse uuendamine
                 }
             }
         }
-
-        public ICommand NextImageCommand => new Command(() =>
-        {
-            if (TravelImages.Count > 0)
-            {
-                SelectedImageIndex = (SelectedImageIndex + 1) % TravelImages.Count;
-                Debug.WriteLine($"Next Button working: {SelectedImageIndex}");
-                OnPropertyChanged(nameof(NextImageCommand));
-            }
-        });
-
-        public ICommand PreviousImageCommand => new Command(() =>
-        {
-            if (TravelImages.Count > 0)
-            {
-                SelectedImageIndex = (SelectedImageIndex - 1 + TravelImages.Count) % TravelImages.Count;
-                Debug.WriteLine($"Back Button working: {SelectedImageIndex}");
-                OnPropertyChanged(nameof(PreviousImageCommand));
-            }
-        });
-
 
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
