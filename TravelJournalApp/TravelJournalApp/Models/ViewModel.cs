@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿
+using System.Collections.ObjectModel;
 using TravelJournalApp.Data;
 using TravelJournalApp.Views;
 
@@ -14,7 +15,9 @@ namespace TravelJournalApp.Models
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
         public ObservableCollection<ImageDatabase> TravelImages { get; set; } = new ObservableCollection<ImageDatabase>();
-        public int SelectedIndex { get; set; } // Add this property
+        public int SelectedImageIndex { get; set; }
 
+        public string PreviousImageCommand { get; set; }
+        public string NextImageCommand {get; set; }
     }
 }

@@ -34,15 +34,15 @@
                                     <Image.Source>
                                         <MultiBinding Converter="{StaticResource ImageSelectorConverter}">
                                             <Binding Path="TravelImages" Mode="TwoWay"/>
-                                            <Binding Path="SelectedIndex" Mode="TwoWay"/>
+                                            <Binding Path="SelectedImageIndex" Mode="TwoWay"/>
                                         </MultiBinding>
                                     </Image.Source>
 
                                 </Image>
 
                                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                    <Button Text="Back" Command="{Binding Source={x:Reference TravelListView}, Path=BindingContext.PreviousImageCommand}" />
-                                    <Button Text="Next" Command="{Binding Source={x:Reference TravelListView}, Path=BindingContext.NextImageCommand}" />
+                                    <Button Text="Back" Command="{Binding PreviousImageCommand}" />
+                                    <Button Text="Next" Command="{Binding NextImageCommand}" />
                                 </StackLayout>
                                 <Grid Padding="0,10"></Grid>
                                     <CollectionView x:Name="ImagesCollectionView"

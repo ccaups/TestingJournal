@@ -16,7 +16,7 @@ namespace TravelJournalApp.Models
 
         private ViewModel _travels;
         public bool isRefreshing;
-        private int _selectedIndex;
+        private int _selectedImageIndex;
         private string _selectedImagePath;
         public int ImageIndex { get; set; }
 
@@ -43,7 +43,6 @@ namespace TravelJournalApp.Models
         {
             _databaseContext = new DatabaseContext();
             Travels = new ObservableCollection<ViewModel>();
-            LoadTravelEntries();
         }
 
         // Method to load travel entries and associated images from the database
@@ -108,12 +107,12 @@ namespace TravelJournalApp.Models
 
         public int SelectedImageIndex
         {
-            get => _selectedIndex;
+            get => _selectedImageIndex;
             set
             {
-                if (_selectedIndex != value)
+                if (_selectedImageIndex != value)
                 {
-                    _selectedIndex = value;
+                    _selectedImageIndex = value;
                     OnPropertyChanged(nameof(SelectedImageIndex));
                     // OnPropertyChanged(nameof(TravelImages)); // Ei pea seda vajalikuks muutma
                     OnPropertyChanged(nameof(TravelImages)); // Käivita TravelImages omaduse uuendamine
@@ -121,48 +120,24 @@ namespace TravelJournalApp.Models
             }
         }
 
-        private async Task RefreshImages()
-        {
-            IsRefreshing = true;
-
-            // Laadige pildid uuesti
-            // ... Näiteks: Travels[0].TravelImages = await LoadImagesFromDatabase();
-
-            IsRefreshing = false;
-        }
-        //Command to navigate to the next image
-        //public ICommand NextImageCommand => new Command(async () =>
-        //{
-        //    if (Travels.Count > 0 && Travels[0].TravelImages.Count > 0)
-        //        SelectedIndex = (SelectedIndex + 1) % Travels[0].TravelImages.Count; // Move to the next image
-        //    Debug.WriteLine($"Next Button working: {SelectedIndex}");
-        //    OnPropertyChanged(nameof(NextImageCommand));
-        //});
-
         public ICommand NextImageCommand => new Command(() =>
         {
-            if (SelectedImageIndex >= 0 && SelectedImageIndex < Travels.Count) // Kontrollib, kas SelectedIndex on kehtiv
+            if (TravelImages.Count > 0)
             {
-                var selectedTravel = Travels[0]; // Leiab õige reisi, ajutine
-                if (selectedTravel.TravelImages.Count > 0) // Kontrollib, kas reisil on pilte
-                {
-                    if (SelectedImageIndex < selectedTravel.TravelImages.Count - 1) // Kontrollib, kas on viimane pilt
-                    {
-                        SelectedImageIndex++; // Liigutab järgmise pildi juurde ainult siis, kui see pole viimane
-                        Debug.WriteLine($"Next Button working: {SelectedImageIndex}");
-                    }
-                }
+                SelectedImageIndex = (SelectedImageIndex + 1) % TravelImages.Count;
+                Debug.WriteLine($"Next Button working: {SelectedImageIndex}");
+                OnPropertyChanged(nameof(NextImageCommand));
             }
-            OnPropertyChanged(nameof(NextImageCommand));
         });
 
-        // Command to navigate to the previous image
-        public ICommand PreviousImageCommand => new Command(async () =>
+        public ICommand PreviousImageCommand => new Command(() =>
         {
-            if (Travels.Count > 0 && Travels[0].TravelImages.Count > 0)
-                SelectedImageIndex = (SelectedImageIndex - 1 + Travels[0].TravelImages.Count) % Travels[0].TravelImages.Count; // Move to the previous image
-            Debug.WriteLine($"Back Button working: {SelectedImageIndex}");
-            OnPropertyChanged(nameof(PreviousImageCommand));
+            if (TravelImages.Count > 0)
+            {
+                SelectedImageIndex = (SelectedImageIndex - 1 + TravelImages.Count) % TravelImages.Count;
+                Debug.WriteLine($"Back Button working: {SelectedImageIndex}");
+                OnPropertyChanged(nameof(PreviousImageCommand));
+            }
         });
 
 
