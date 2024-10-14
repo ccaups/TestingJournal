@@ -127,6 +127,7 @@ namespace TravelJournalApp.Views
                 StatusLabel.TextColor = Color.FromArgb("#00FF00");
                 TitleEntry.Text = string.Empty;
                 DescriptionEditor.Text = string.Empty;
+                LocationEntry.Text = string.Empty;
                 selectedTempImagePaths.Clear();
                 selectedImagePaths.Clear();
                 imagePreviews.Clear(); // Clear the previews

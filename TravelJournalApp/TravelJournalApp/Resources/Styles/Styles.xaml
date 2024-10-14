@@ -15,6 +15,18 @@
         <Setter Property="CornerRadius" Value="20"/>
         <Setter Property="Margin" Value="2,10,2,2"/>
         <Setter Property="Padding" Value="15,10"/>
+
+    </Style>
+
+    <Style TargetType="Button" x:Key="BackNextButtonStyle">
+        <Setter Property="TextColor" Value="Transparent" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="FontFamily" Value="RobotRegular"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="BorderWidth" Value="0"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="HorizontalOptions" Value="Fill"/>
+        <Setter Property="VerticalOptions" Value="Fill"/>
     </Style>
 
     <Style TargetType="Button" x:Key="DefaultMenuButtonStyle">

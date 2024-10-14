@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TravelJournalApp.Models"
              x:Class="TravelJournalApp.Views.TravelPage">
-    
+
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
@@ -12,7 +12,7 @@
     </ContentPage.Background>
 
     <ContentPage.Resources>
-        <local:ImageSelectorConverter x:Key="ImageSelectorConverter" />
+        <local:ImageSelectorConverter x:Key="ImageSelectorConverter"/>
     </ContentPage.Resources>
 
     <ContentPage.Content>
@@ -26,22 +26,42 @@
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout Orientation="Vertical" Padding="35">
+                                <Grid>
+
+                                    <Image x:Name="HeroImage"
+                                           Aspect="AspectFill"
+                                           HeightRequest="600"
+                                           IsVisible="True" 
+                                       >
+                                        <Image.Source ZIndex="1">
+                                            <MultiBinding Converter="{StaticResource ImageSelectorConverter}">
+                                                <Binding Path="TravelImages" Mode="TwoWay"/>
+                                                <Binding Path="SelectedImageIndex" Mode="TwoWay"/>
+                                            </MultiBinding>
+                                        </Image.Source>
+                                    </Image>
+                                    <Grid ColumnDefinitions="*,*,*">
+                                        <Grid Grid.Column="0">
+                                            <Button 
+                                            Text="Back" Command="{Binding PreviousImageCommand}"
+                                            Style="{StaticResource BackNextButtonStyle}"/>
+                                        </Grid>
+                                        <Grid Grid.Column="1">
+                                            <Button 
+                                            Text="Edit" Command="{Binding DetialImageCommand}"
+                                                Style="{StaticResource BackNextButtonStyle}"/>
+                                        </Grid>
+                                        <Grid Grid.Column="3">
+                                            <Button 
+                                            Text="Next" Command="{Binding NextImageCommand}"
+                                                Style="{StaticResource BackNextButtonStyle}"/>
+                                        </Grid>
+                                        
+                                        
+                                    </Grid>
+                                </Grid>
                                 <!--HeroImageSource-->
-                                <Image x:Name="HeroImage"
-                                       Aspect="AspectFill"
-                                       HeightRequest="600"
-                                       IsVisible="True" >
-                                    <Image.Source>
-                                        <MultiBinding Converter="{StaticResource ImageSelectorConverter}">
-                                            <Binding Path="TravelImages" Mode="TwoWay"/>
-                                            <Binding Path="SelectedImageIndex" Mode="TwoWay"/>
-                                        </MultiBinding>
-                                    </Image.Source>
-                                </Image>
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                    <Button Text="Back" Command="{Binding PreviousImageCommand}" />
-                                    <Button Text="Next" Command="{Binding NextImageCommand}"/>
-                                </StackLayout>
+
                                 <Grid Padding="0,10"></Grid>
                                     <CollectionView x:Name="ImagesCollectionView"
                                                     ItemsSource="{Binding TravelImages}"
