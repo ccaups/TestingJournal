@@ -12,36 +12,32 @@ namespace TravelJournalApp.Models
     public class ListViewModel : INotifyPropertyChanged
     {
         private readonly DatabaseContext _databaseContext;
-        public ObservableCollection<ViewModel> Travels { get; set; } = new ObservableCollection<ViewModel>();
-
-        private ViewModel _travels;
+        public ObservableCollection<TravelViewModel> Travels { get; set; } /*= new ObservableCollection<TravelViewModel>();*/
         public bool isRefreshing;
-        private int _selectedImageIndex;
-        private string _selectedImagePath;
+        public int _selectedImageIndex{get; set; }
+        public int SelectedImageIndex { get; set; }
+        private readonly INavigation _navigation;
 
-        public ObservableCollection<ImageDatabase> TravelImages
+        private TravelViewModel _selectedTravel;
+        public TravelViewModel SelectedTravel
         {
-            get
+            get => _selectedTravel;
+            set
             {
-                if (SelectedImageIndex >= 0 && Travels.Count > 0) // Check if Travels is not empty
+                if (_selectedTravel != value)
                 {
-                    // Assuming you always want to work with the first travel entry (Travels[0])
-                    var currentTravel = Travels[0];
-
-                    if (SelectedImageIndex < currentTravel.TravelImages.Count)
-                    {
-                        // Return an ObservableCollection with the selected image
-                        return new ObservableCollection<ImageDatabase> { currentTravel.TravelImages[SelectedImageIndex] };
-                    }
+                    _selectedTravel = value;
+                    OnPropertyChanged(nameof(SelectedTravel));
                 }
-                return new ObservableCollection<ImageDatabase>();
             }
         }
 
-        public ListViewModel()
+        public ListViewModel(INavigation navigation)
         {
+            _navigation = navigation;
             _databaseContext = new DatabaseContext();
-            Travels = new ObservableCollection<ViewModel>();
+            Travels = new ObservableCollection<TravelViewModel>();
+            //LoadTravelEntries();
         }
 
         // Method to load travel entries and associated images from the database
@@ -49,27 +45,35 @@ namespace TravelJournalApp.Models
         {
             try
             {
-                var travels = await _databaseContext.GetAllAsync<TravelJournal>();
+                var travels = await _databaseContext.GetAllAsync<TravelJournalTable>();
 
                 if (travels != null)
                 {
+                    // Sorteeri reisid CreatedAt omaduse alusel kahanevas järjekorras
+                    travels = travels.OrderByDescending(t => t.CreatedAt).ToList();
+
                     foreach (var travel in travels)
                     {
-                        var images = await _databaseContext.GetFilteredAsync<ImageDatabase>(img => img.TravelJournalId == travel.Id);
+                        var images = await _databaseContext.GetFilteredAsync<ImageTable>(img => img.TravelJournalId == travel.Id);
 
-                        var viewModel = new ViewModel
+                        var viewModel = new TravelViewModel(_navigation)
                         {
                             Id = travel.Id,
                             Title = travel.Title,
                             Description = travel.Description,
                             Location = travel.Location,
-                            TravelDate = travel.TravelDate,
                             CreatedAt = travel.CreatedAt,
                             LastUpdatedAt = travel.LastUpdatedAt,
-                            TravelImages = new ObservableCollection<ImageDatabase>(images),
+                            TravelStartDate = travel.TravelStartDate,
+                            TravelEndDate = travel.TravelEndDate,
+                            TravelImages = new ObservableCollection<ImageTable>(images),
+                            
                         };
 
-                        Travels.Add(viewModel); // Add travel to collection
+                        Travels.Add(viewModel);
+
+                        SelectedTravel = Travels.First();  // Preselect the first travel item
+
                     }
                 }
             }
@@ -78,6 +82,8 @@ namespace TravelJournalApp.Models
                 Debug.WriteLine($"Error loading travel entries: {ex.Message}");
             }
         }
+
+        // Käsk detailvaatele navigeerimiseks
 
         // IsRefreshing property for pull-to-refresh functionality
         public bool IsRefreshing
@@ -103,24 +109,15 @@ namespace TravelJournalApp.Models
             await LoadTravelEntries();
             IsRefreshing = false;
         }
-
-        public int SelectedImageIndex
+        public ICommand NavigateToDetailsCommand => new Command<TravelViewModel>(async (travel) =>
         {
-            get => _selectedImageIndex;
-            set
-            {
-                if (_selectedImageIndex != value)
-                {
-                    _selectedImageIndex = value;
-                    OnPropertyChanged(nameof(SelectedImageIndex));
-                    OnPropertyChanged(nameof(TravelImages)); // Käivita TravelImages omaduse uuendamine
-                }
-            }
-        }
+            Debug.WriteLine($"Navigate to details");
+            await _navigation.PushAsync(new TravelDetailPage(travel, _navigation));
+        });
 
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

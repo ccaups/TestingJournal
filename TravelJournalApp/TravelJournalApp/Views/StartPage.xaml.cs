@@ -62,6 +62,6 @@ public partial class StartPage : ContentPage
         await Task.Delay(5000);
 
         // Redirecting page
-        Application.Current.MainPage = new NavigationPage(new TravelPage());
+        Application.Current.MainPage = new NavigationPage(new TravelMainPage());
     }
 }

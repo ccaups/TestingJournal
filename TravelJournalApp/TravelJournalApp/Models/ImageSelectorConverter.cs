@@ -1,29 +1,37 @@
-﻿using System.Globalization;
-using TravelJournalApp.Models;
-using TravelJournalApp.Data;
-using System.Diagnostics;
+﻿//using System.Diagnostics;
+//using System.Globalization;
+//using TravelJournalApp.Data;
+//using TravelJournalApp.Models;
 
-namespace TravelJournalApp.Models
-{
-    public class ImageSelectorConverter : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (values[0] is not IList<ImageDatabase> images || values[1] is not int index)
-                return null;
+//namespace TravelJournalApp.Models
+//{
+//    public class ImageSelectorConverter : IMultiValueConverter
+//    {
+//        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+//        {
+//            if (values[0] is not TravelViewModel selectedTravel || values[1] is not int index)
+//            {
+//                Debug.WriteLine("Error in ImageSelectorConverter: Invalid input values.");
+//                return "path/to/default/image.jpg"; // Tagasta vaikimisi pildi tee
+//            }
 
-            // Logi, milline pilt on valitud
-            Debug.WriteLine($"SelectedIndex: {index}, Total Images: {images.Count}");
+//            var images = selectedTravel.TravelImages;
 
-            if (index >= 0 && index < images.Count)
-                return images[index].FilePath; // Assuming ImageDatabase has a FilePath property
+//            Debug.WriteLine($"SelectedIndex: {index}, Total Images: {images.Count}");
 
-            return null;
-        }
+//            if (index >= 0 && index < images.Count)
+//            {
+//                return images[index].FilePath;
+//            }
+//            else
+//            {
+//                Debug.WriteLine($"Error in ImageSelectorConverter: Invalid image index: {index}");
+//                return "path/to/default/image.jpg"; // Tagasta vaikimisi pildi tee
+//            }
+//        }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-}
+//        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+//        {
+//            throw new NotImplementedException();
+//        }}
+//}

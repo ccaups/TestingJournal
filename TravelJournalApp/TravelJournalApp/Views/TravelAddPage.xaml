@@ -1,0 +1,126 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TravelJournalApp.Views.TravelAddPage"
+             Title="Add Travel">
+
+    <!-- Background with Gradient -->
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
+            <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <!-- Visual State Manager for responsiveness -->
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="AdaptiveStates">
+            <!-- Mobile State -->
+            <VisualState x:Name="Mobile">
+                <VisualState.StateTriggers>
+                    <AdaptiveTrigger MinWindowWidth="0" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                    <!-- Adjust paddings and layouts for mobile -->
+                    <Setter Property="Padding" TargetName="MainStack" Value="10,10,10,20" />
+                </VisualState.Setters>
+            </VisualState>
+
+            <!-- Desktop State -->
+            <VisualState x:Name="Desktop">
+                <VisualState.StateTriggers>
+                    <AdaptiveTrigger MinWindowWidth="600" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                    <!-- Adjust paddings and layouts for desktop -->
+                    <Setter Property="Padding" TargetName="MainStack" Value="40,40,40,100" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
+    <Grid RowDefinitions="Auto,*">
+        <ScrollView x:Name="MyScrollView" 
+                    Grid.Row="1"
+                    HorizontalScrollBarVisibility="Never"
+                    VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout x:Name="MainStack" Padding="20,20,20,300">
+
+                <!-- Travel Name Entry -->
+                <Label Text="Travel Name:" />
+                <Entry x:Name="TitleEntry" Placeholder="Enter title" />
+
+                <!-- Date Grid -->
+                <Grid x:Name="DateGrid" ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
+                    <!-- Travel Start Date Section -->
+                    <StackLayout HorizontalOptions="Start" Grid.Column="0">
+                        <Label Text="Travel Start Date:" 
+                               VerticalOptions="Center" />
+                        <DatePicker x:Name="DateStartEntry" 
+                                    Format="dd.MM.yyyy" 
+                                    Date="{Binding TravelStartDate}"
+                                    VerticalOptions="End"
+                                    TranslationY="8"/>
+                    </StackLayout>
+
+                    <!-- Travel End Date Section -->
+                    <StackLayout HorizontalOptions="Start" Margin="20,0,0,0"
+                                 Grid.Column="1">
+                        <Label Text="Travel End Date:" 
+                               VerticalOptions="Center" />
+                        <DatePicker x:Name="DateEndEntry" 
+                                     Format="dd.MM.yyyy" 
+                                     Date="{Binding TravelEndDate}"
+                                     VerticalOptions="End"
+                                     TranslationY="8"/>
+                    </StackLayout>
+                </Grid>
+
+                <!-- Location Entry -->
+                <Label Text="Location:" />
+                <Entry x:Name="LocationEntry" Placeholder="Enter location" />
+
+                <!-- Description Editor -->
+                <Label Text="Description:" />
+                <Editor x:Name="DescriptionEditor" Placeholder="Enter description" />
+
+                <!-- Buttons for Back, Choose Images, and Save -->
+                <Grid x:Name="ButtonGrid" ColumnDefinitions="*, *, *">
+                    <Button Text="Back" Clicked="OnBackButtonClicked" Grid.Column="0"/>
+                    <Button Text="Choose Images" Clicked="OnPickPhotosClicked" Grid.Column="1"/>
+                    <Button Text="Save Travel" Clicked="SaveTravelClicked" Grid.Column="2"/>
+                </Grid>
+
+                <!-- Status Label for Feedback -->
+                <Label x:Name="StatusLabel"
+                       HorizontalOptions="Center"
+                       FontSize="Medium"
+                       Margin="0,0,0,0">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Travel saved successfully!">
+                            <Setter Property="TextColor" Value="Green" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Failed to save travel.">
+                            <Setter Property="TextColor" Value="Red" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <!-- Activity Indicator -->
+                <ActivityIndicator x:Name="activityIndicator" IsRunning="False" IsVisible="False" />
+
+                <!-- CollectionView for Image Previews -->
+                <CollectionView x:Name="ImagesCollectionView" 
+                                ItemsSource="{Binding imagePreviews}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Vertical">
+                                <Image Source="{Binding .}" Aspect="AspectFill" WidthRequest="500" HeightRequest="500" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
