@@ -8,5 +8,17 @@
             Text="Welcome to .NET MAUI!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+
+        <Label Text="Are you sure you want to delete this travel entry?" 
+               HorizontalOptions="Center" 
+               VerticalOptions="CenterAndExpand" />
+
+        <Button Text="Delete"
+                Clicked="DeleteTravelButton_Clicked" />
+
+
+        <Button Text="Back"
+                Margin="35,25"
+                Clicked="OnBackButtonClicked"/>
     </VerticalStackLayout>
 </ContentPage>

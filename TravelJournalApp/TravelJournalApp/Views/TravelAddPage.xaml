@@ -38,11 +38,15 @@
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
 
-    <Grid RowDefinitions="Auto,*">
-        <ScrollView x:Name="MyScrollView" 
-                    Grid.Row="1"
-                    HorizontalScrollBarVisibility="Never"
-                    VerticalScrollBarVisibility="Never">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never"
+                    x:Name="MyScrollView"
+                    HorizontalScrollBarVisibility="Never">
             <VerticalStackLayout x:Name="MainStack" Padding="20,20,20,300">
 
                 <!-- Travel Name Entry -->
@@ -81,32 +85,12 @@
 
                 <!-- Description Editor -->
                 <Label Text="Description:" />
-                <Editor x:Name="DescriptionEditor" Placeholder="Enter description" />
+                <Editor x:Name="DescriptionEditor" Placeholder="Enter description" Margin="0,0,0,15"/>
 
-                <!-- Buttons for Back, Choose Images, and Save -->
-                <Grid x:Name="ButtonGrid" ColumnDefinitions="*, *, *">
-                    <Button Text="Back" Clicked="OnBackButtonClicked" Grid.Column="0"/>
-                    <Button Text="Choose Images" Clicked="OnPickPhotosClicked" Grid.Column="1"/>
-                    <Button Text="Save Travel" Clicked="SaveTravelClicked" Grid.Column="2"/>
-                </Grid>
 
-                <!-- Status Label for Feedback -->
-                <Label x:Name="StatusLabel"
-                       HorizontalOptions="Center"
-                       FontSize="Medium"
-                       Margin="0,0,0,0">
-                    <Label.Triggers>
-                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Travel saved successfully!">
-                            <Setter Property="TextColor" Value="Green" />
-                        </DataTrigger>
-                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Failed to save travel.">
-                            <Setter Property="TextColor" Value="Red" />
-                        </DataTrigger>
-                    </Label.Triggers>
-                </Label>
 
-                <!-- Activity Indicator -->
-                <ActivityIndicator x:Name="activityIndicator" IsRunning="False" IsVisible="False" />
+
+
 
                 <!-- CollectionView for Image Previews -->
                 <CollectionView x:Name="ImagesCollectionView" 
@@ -122,5 +106,38 @@
 
             </VerticalStackLayout>
         </ScrollView>
+        <StackLayout Grid.Row="1" 
+                     Orientation="Horizontal" 
+                     Padding="15" 
+                     Spacing="5"
+                     HorizontalOptions="Center">
+            <Grid RowDefinitions="*,Auto">
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                    <!-- Status Label for Feedback -->
+                    <Label x:Name="StatusLabel"
+                                    HorizontalOptions="Center"
+                                    FontSize="Medium"
+                                    Margin="0,0,0,0"
+                           Grid.Column="0">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Travel saved successfully!">
+                                <Setter Property="TextColor" Value="Green" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Failed to save travel.">
+                                <Setter Property="TextColor" Value="Red" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <!-- Activity Indicator -->
+                    <ActivityIndicator x:Name="activityIndicator" IsRunning="False" IsVisible="False" Grid.Column="1"/>
+                </Grid>
+                <Grid Grid.Row="1" ColumnDefinitions="*,*,*">
+                    <!--Buttons for Back, Choose Images, and Save-->
+                    <Button Text="Back" Clicked="OnBackButtonClicked" Grid.Column="0"/>
+                    <Button Text="Choose Images" Clicked="OnPickPhotosClicked" Grid.Column="1"/>
+                    <Button Text="Save Travel" Clicked="SaveTravelClicked" Grid.Column="2"/>
+                </Grid>
+            </Grid>
+        </StackLayout>
     </Grid>
 </ContentPage>

@@ -16,7 +16,6 @@ namespace TravelJournalApp.Models
         public bool isRefreshing;
         public int _selectedImageIndex{get; set; }
         public int SelectedImageIndex { get; set; }
-        private readonly INavigation _navigation;
 
         private TravelViewModel _selectedTravel;
         public TravelViewModel SelectedTravel
@@ -32,9 +31,8 @@ namespace TravelJournalApp.Models
             }
         }
 
-        public ListViewModel(INavigation navigation)
+        public ListViewModel()
         {
-            _navigation = navigation;
             _databaseContext = new DatabaseContext();
             Travels = new ObservableCollection<TravelViewModel>();
             //LoadTravelEntries();
@@ -56,7 +54,7 @@ namespace TravelJournalApp.Models
                     {
                         var images = await _databaseContext.GetFilteredAsync<ImageTable>(img => img.TravelJournalId == travel.Id);
 
-                        var viewModel = new TravelViewModel(_navigation)
+                        var viewModel = new TravelViewModel
                         {
                             Id = travel.Id,
                             Title = travel.Title,
@@ -102,17 +100,20 @@ namespace TravelJournalApp.Models
         // Refresh command to reload travel entries
         public ICommand RefreshCommand => new Command(async () => await RefreshDataAsync());
 
-        private async Task RefreshDataAsync()
+        public async Task RefreshDataAsync()
         {
+            
             IsRefreshing = true;
             Travels.Clear();
+            SelectedTravel = null;
             await LoadTravelEntries();
             IsRefreshing = false;
         }
         public ICommand NavigateToDetailsCommand => new Command<TravelViewModel>(async (travel) =>
         {
             Debug.WriteLine($"Navigate to details");
-            await _navigation.PushAsync(new TravelDetailPage(travel, _navigation));
+            // Navigeeri detailvaatele ja edasta valitud reisi objekt parameetrina
+            await Application.Current.MainPage.Navigation.PushAsync(new TravelDetailPage(travel));
         });
 
         // INotifyPropertyChanged implementation

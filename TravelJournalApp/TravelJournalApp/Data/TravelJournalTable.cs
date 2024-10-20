@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using System.ComponentModel.DataAnnotations;
 
 namespace TravelJournalApp.Data
 {
@@ -6,6 +7,7 @@ namespace TravelJournalApp.Data
     [Table("TravelJournalTable")]
     public class TravelJournalTable
     {
+        [PrimaryKey]
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

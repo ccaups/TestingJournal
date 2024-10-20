@@ -19,15 +19,10 @@ namespace TravelJournalApp.Models
         public DateTime TravelStartDate { get; set; }
         public DateTime TravelEndDate { get; set; }
         public ObservableCollection<ImageTable> TravelImages { get; set; } = new ObservableCollection<ImageTable>();
-        private readonly INavigation _navigation;
+
         private int _selectedImageIndex;
         private TravelViewModel _selectedTravel;
         private bool _isSelected;
-
-        public TravelViewModel(INavigation navigation)
-        {
-            _navigation = navigation;
-        }
         public bool IsSelected
         {
             get => _isSelected;
@@ -100,7 +95,9 @@ namespace TravelJournalApp.Models
             }
         }
 
-        
+
+
+
         // This property provides the source for the HeroImage backup
         //public string HeroImageSource
         //{
@@ -129,6 +126,8 @@ namespace TravelJournalApp.Models
         //    }
         //}
 
+        public string TravelDates => $"{TravelStartDate:dd.MM.yy} - {TravelEndDate:dd.MM.yy}";
+
 
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
@@ -137,5 +136,6 @@ namespace TravelJournalApp.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-    }
+
+	}
 }

@@ -1,12 +1,126 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TravelJournalApp.Models"
              x:Class="TravelJournalApp.Views.TravelUpdatePage"
              Title="Update">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
+            <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid>
+        <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never" Padding="20,20,20,10">
+            <StackLayout>
+                
+                <!--Pealkirja kuvamine-->
+                <Label Text="Travel Name:"
+                       FontSize="Small"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Start"
+                       VerticalOptions="End"/>
+                <Entry x:Name="TitleEntry" 
+                        Text="{Binding Title}"
+                        />
+
+                <!--Reisi alguskuupäeva valimine-->
+                <Grid x:Name="DateGrid" ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
+                    <StackLayout HorizontalOptions="Start" Grid.Column="0">
+                        <Label Text="Travel Start Date:" 
+                               VerticalOptions="Center" />
+                        <DatePicker x:Name="DateStartEntry" 
+                                    Format="dd.MM.yyyy" 
+                                    Date="{Binding TravelStartDate}"
+                                    VerticalOptions="End"
+                                    TranslationY="8"/>
+                    </StackLayout>
+
+                    <!-- Reisi lõppkuupäeva valimine-->
+                    <StackLayout HorizontalOptions="Start" Margin="20,0,0,0"
+                                 Grid.Column="1">
+                        <Label Text="Travel End Date:" 
+                               VerticalOptions="Center" />
+                        <DatePicker x:Name="DateEndEntry" 
+                                    Format="dd.MM.yyyy" 
+                                    Date="{Binding TravelEndDate}"
+                                    VerticalOptions="End"
+                                    TranslationY="8"/>
+                    </StackLayout>
+                </Grid>
+                
+                <!--Reisi asukoha kuvamine-->
+                <Label Text="Location:"
+                       FontSize="Small"
+                       FontAttributes="Bold"/>
+                <Entry x:Name="LocationEntry" 
+                        Text="{Binding Location}"/>
+
+                <!--Reisi kirjelduse kuvamine-->
+                <Label Text="Description:"
+                       FontSize="Small"
+                       FontAttributes="Bold"/>
+                <ScrollView>
+                    <Editor x:Name="DescriptionEditor"
+                    Text="{Binding Description, Mode=TwoWay}"
+                    HeightRequest="150"
+                    AutoSize="TextChanges"/>
+                </ScrollView>
+
+                <!--Piltide lisamine-->
+                <Grid x:Name="PictureGrid" ColumnDefinitions="Auto,*">
+                    <Label Text="Pictures:"
+                       FontSize="Small"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"/>
+                    <Button Text="Choose Images"
+                            Grid.Column="1"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            Clicked="OnPickPhotosClicked"/>
+                </Grid>
+
+                <!-- Piltide kuvamine -->
+                <Label Text="" HeightRequest="20"/>
+                <CollectionView x:Name="ImagesCollectionView" 
+                                ItemsSource="{Binding ImageViewModel}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Vertical">
+                                <Image Source="{Binding ImageSource}"
+                                       Aspect="AspectFill" 
+                                       WidthRequest="500" 
+                                       HeightRequest="500"/>
+                                <Button Text="Delete"
+                                        WidthRequest="500"/>
+                                <BoxView HeightRequest="20"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Status Label for Feedback -->
+                <Label x:Name="StatusLabel"
+                       HorizontalOptions="Center"
+                       FontSize="Small"
+                       Margin="0,0,0,0"
+                       IsVisible="False"/>
+
+                <Grid ColumnDefinitions="*,*">
+                    <Button Text="Update"
+                            Margin="35,25"
+                            Clicked="OnUpdateButtonClicked"
+                            Grid.Column="0"/>
+
+                    <Button Text="Back"
+                        Margin="35,25"
+                        Clicked="OnBackButtonClicked"
+                        Grid.Column="1"/>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
