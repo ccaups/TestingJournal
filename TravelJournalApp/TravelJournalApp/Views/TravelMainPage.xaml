@@ -59,7 +59,8 @@
                                Grid.Row="1"
                                Grid.ColumnSpan="4" 
                                Aspect="AspectFill"
-                               HeightRequest="500"
+                               
+                               MaximumWidthRequest="900"
                                Source="{Binding SelectedTravel.HeroImageSource}">
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" 
@@ -102,20 +103,20 @@
 
                     <!-- Empty State Message -->
                     <Label Text="No travel entries found. Please add a new entry."
+                           Margin="25,25"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
                            IsVisible="{Binding Travels.Count, Converter={StaticResource CountToVisibilityConverter}}" />
 
                 </StackLayout>
             </ScrollView>
-            <StackLayout Grid.Row="1" 
-                     Orientation="Horizontal" 
-                     Padding="15" 
-                     Spacing="5"
-                     HorizontalOptions="Center">
-                <Button Text="Add New Travel"
+            <Grid Grid.Row="1" 
+              Margin="10,25"
+                  >
+                <Button MaximumWidthRequest="500"
+                        Text="Add New Travel"
                         Clicked="Add_Travel_Clicked" />
-            </StackLayout>
+            </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

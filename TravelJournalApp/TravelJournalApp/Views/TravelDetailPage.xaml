@@ -49,7 +49,7 @@
                            TranslationY="5"/>
                 </Grid>
 
-                <Image x:Name="BigHeroImage"
+                <!--<Image x:Name="BigHeroImage"
                        Grid.Row="1"
                        Grid.ColumnSpan="2" 
                        Aspect="AspectFill"
@@ -60,7 +60,7 @@
                         <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" 
                                               CommandParameter="{Binding SelectedTravel}" />
                     </Image.GestureRecognizers>
-                </Image>
+                </Image>-->
 
                 <Label Text="{Binding Description}" 
                        Grid.Column="0"
@@ -72,15 +72,19 @@
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="End" />
 
-                <CarouselView ItemsSource="{Binding TravelImages}" 
-                              HeightRequest="100" 
+                <CarouselView Grid.Row="1"
+                              Grid.ColumnSpan="2"
+                              ItemsSource="{Binding TravelImages}" 
+                              HeightRequest="400"
+                              WidthRequest="400"
                               Margin="15,20,15,0">
                     <CarouselView.ItemTemplate>
                         <DataTemplate>
                             <Image Source="{Binding FilePath}" 
-                                   Aspect="AspectFill" 
-                                   HeightRequest="100" 
-                                   Margin="10,0">
+                                   Aspect="AspectFit" 
+                                   HeightRequest="800" 
+                                   Margin="10,0"
+                                   >
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnImageTapped" 
                                                           CommandParameter="{Binding FilePath}" />
@@ -91,30 +95,76 @@
                 </CarouselView>
             </StackLayout>
         </ScrollView>
-        <StackLayout Grid.Row="1" 
-                     Orientation="Horizontal" 
-                     Padding="15" 
-                     Spacing="5">
+        
+        
+        <Grid Grid.Row="1" 
+              ColumnDefinitions="*, *, *"
+              Margin="10,25">
             <Button Text="Back"
-                    BackgroundColor="#D3D3D3"
-                    TextColor="#333333"
-                    HorizontalOptions="FillAndExpand" 
+                    Grid.Column="0"
                     Clicked="OnBackButtonClicked"/>
             <Button Text="Edit"
-                    BackgroundColor="#ADD8E6"
-                    TextColor="#00008B"
-                    HorizontalOptions="FillAndExpand" 
+                    Grid.Column="1"
                     Clicked="OnEditButtonClicked"/>
             <Button Text="Delete" 
                     BackgroundColor="#FF6347" 
-                    TextColor="#FFFFFF" 
-                    HorizontalOptions="FillAndExpand" 
+                    Grid.Column="2"
                     Clicked="OnDeleteButtonClicked"/>
-        </StackLayout>
+        </Grid>
 
-        <Grid x:Name="ZoomOverlay" 
-              BackgroundColor="Black" 
-              Opacity="0.8" 
+<Grid x:Name="ZoomOverlay" 
+      VerticalOptions="FillAndExpand" 
+      HorizontalOptions="FillAndExpand" 
+      IsVisible="False">
+
+    <!-- Semi-transparent black background -->
+    <BoxView BackgroundColor="Black"
+             Opacity="0.61"
+             VerticalOptions="FillAndExpand" 
+             HorizontalOptions="FillAndExpand"/>
+
+    <!-- Image filling 100% without transparency issues -->
+    <Image x:Name="ZoomedImage"
+           Aspect="AspectFit"
+           HorizontalOptions="FillAndExpand"
+           VerticalOptions="FillAndExpand"
+           HeightRequest="300"/>
+
+    <!-- Left navigation button -->
+    <Button Text="◄" 
+            HorizontalOptions="Start" 
+            VerticalOptions="Center" 
+            BackgroundColor="Transparent" 
+            TextColor="White" 
+            Clicked="OnPreviousImageClicked" 
+            WidthRequest="100" 
+            HeightRequest="250" 
+            FontSize="Large" 
+            Opacity="0.7"/>
+
+    <!-- Right navigation button -->
+    <Button Text="►" 
+            HorizontalOptions="End" 
+            VerticalOptions="Center" 
+            BackgroundColor="Transparent" 
+            TextColor="White" 
+            Clicked="OnNextImageClicked" 
+            WidthRequest="100" 
+            HeightRequest="250" 
+            FontSize="Large" 
+            Opacity="0.7"/>
+
+    <!-- Add Gesture Recognizers at the end or beginning -->
+    <Grid.GestureRecognizers>
+        <TapGestureRecognizer Tapped="OnOverlayTapped" />
+    </Grid.GestureRecognizers>
+</Grid>
+
+
+        <!--BUG android-->
+        <!--<Grid x:Name="ZoomOverlay" 
+              BackgroundColor="rgba" 
+              Opacity="1" 
               IsVisible="False" 
               VerticalOptions="FillAndExpand" 
               HorizontalOptions="FillAndExpand">
@@ -149,6 +199,6 @@
             HeightRequest="250" 
             FontSize="Large" 
             Opacity="0.7"/>
-        </Grid>
+        </Grid>-->
     </Grid>
 </ContentPage>

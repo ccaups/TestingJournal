@@ -13,6 +13,10 @@
     </ContentPage.Background>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never" Padding="20,20,20,10">
             <StackLayout>
                 
@@ -95,7 +99,8 @@
                                        WidthRequest="500" 
                                        HeightRequest="500"/>
                                 <Button Text="Delete"
-                                        WidthRequest="500"/>
+                                        Margin="25,10,25,25"
+                                        MaximumWidthRequest="250"/>
                                 <BoxView HeightRequest="20"/>
                             </StackLayout>
                         </DataTemplate>
@@ -108,19 +113,16 @@
                        FontSize="Small"
                        Margin="0,0,0,0"
                        IsVisible="False"/>
-
-                <Grid ColumnDefinitions="*,*">
-                    <Button Text="Update"
-                            Margin="35,25"
-                            Clicked="OnUpdateButtonClicked"
-                            Grid.Column="0"/>
-
-                    <Button Text="Back"
-                        Margin="35,25"
-                        Clicked="OnBackButtonClicked"
-                        Grid.Column="1"/>
-                </Grid>
             </StackLayout>
         </ScrollView>
+           <Grid Grid.Row="1" ColumnDefinitions="*,*"
+                 Margin="10,25">
+                <Button Text="Update"
+                        Clicked="OnUpdateButtonClicked"
+                        Grid.Column="0"/>
+                <Button Text="Back"
+                        Clicked="OnBackButtonClicked"
+                        Grid.Column="1"/> 
+           </Grid>
     </Grid>
 </ContentPage>

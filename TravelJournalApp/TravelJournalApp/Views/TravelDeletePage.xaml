@@ -3,22 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TravelJournalApp.Views.TravelDeletePage"
              Title="Delete">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
+            <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+    
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+
 
         <Label Text="Are you sure you want to delete this travel entry?" 
                HorizontalOptions="Center" 
-               VerticalOptions="CenterAndExpand" />
+               VerticalOptions="CenterAndExpand"
+               Margin="25,25"/>
 
         <Button Text="Delete"
-                Clicked="DeleteTravelButton_Clicked" />
+                Clicked="DeleteTravelButton_Clicked"
+                BackgroundColor="#FF6347" 
+                Margin="25,25"/>
 
 
         <Button Text="Back"
-                Margin="35,25"
+                Margin="25,25"
                 Clicked="OnBackButtonClicked"/>
     </VerticalStackLayout>
 </ContentPage>
