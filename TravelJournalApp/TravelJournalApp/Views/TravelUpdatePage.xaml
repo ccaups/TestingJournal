@@ -11,118 +11,170 @@
             <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
         </LinearGradientBrush>
     </ContentPage.Background>
-
-    <Grid>
+    
+     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never" Padding="20,20,20,10">
-            <StackLayout>
-                
-                <!--Pealkirja kuvamine-->
-                <Label Text="Travel Name:"
+
+        
+            <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never" Padding="20,20,20,10">
+                <StackLayout>
+
+                    <!--Pealkirja kuvamine-->
+                    <Label Text="Travel Name:"
                        FontSize="Small"
                        FontAttributes="Bold"
                        HorizontalOptions="Start"
                        VerticalOptions="End"/>
-                <Entry x:Name="TitleEntry" 
+                    <Entry x:Name="TitleEntry" 
                         Text="{Binding Title}"
                         />
 
-                <!--Reisi alguskuupäeva valimine-->
-                <Grid x:Name="DateGrid" ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
-                    <StackLayout HorizontalOptions="Start" Grid.Column="0">
-                        <Label Text="Travel Start Date:" 
+                    <!--Reisi alguskuupäeva valimine-->
+                    <Grid x:Name="DateGrid" ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
+                        <StackLayout HorizontalOptions="Start" Grid.Column="0">
+                            <Label Text="Travel Start Date:" 
                                VerticalOptions="Center" />
-                        <DatePicker x:Name="DateStartEntry" 
+                            <DatePicker x:Name="DateStartEntry" 
                                     Format="dd.MM.yyyy" 
                                     Date="{Binding TravelStartDate}"
                                     VerticalOptions="End"
                                     TranslationY="8"/>
-                    </StackLayout>
+                        </StackLayout>
 
-                    <!-- Reisi lõppkuupäeva valimine-->
-                    <StackLayout HorizontalOptions="Start" Margin="20,0,0,0"
+                        <!-- Reisi lõppkuupäeva valimine-->
+                        <StackLayout HorizontalOptions="Start" Margin="20,0,0,0"
                                  Grid.Column="1">
-                        <Label Text="Travel End Date:" 
+                            <Label Text="Travel End Date:" 
                                VerticalOptions="Center" />
-                        <DatePicker x:Name="DateEndEntry" 
+                            <DatePicker x:Name="DateEndEntry" 
                                     Format="dd.MM.yyyy" 
                                     Date="{Binding TravelEndDate}"
                                     VerticalOptions="End"
                                     TranslationY="8"/>
-                    </StackLayout>
-                </Grid>
-                
-                <!--Reisi asukoha kuvamine-->
-                <Label Text="Location:"
+                        </StackLayout>
+                    </Grid>
+
+                    <!--Reisi asukoha kuvamine-->
+                    <Label Text="Location:"
                        FontSize="Small"
                        FontAttributes="Bold"/>
-                <Entry x:Name="LocationEntry" 
+                    <Entry x:Name="LocationEntry" 
                         Text="{Binding Location}"/>
 
-                <!--Reisi kirjelduse kuvamine-->
-                <Label Text="Description:"
-                       FontSize="Small"
-                       FontAttributes="Bold"/>
-                <ScrollView>
-                    <Editor x:Name="DescriptionEditor"
-                    Text="{Binding Description, Mode=TwoWay}"
-                    HeightRequest="150"
-                    AutoSize="TextChanges"/>
-                </ScrollView>
+                    <!--Reisi kirjelduse kuvamine-->
+                    <Label Text="Description:"
+                          FontSize="Small"
+                          FontAttributes="Bold"/>
+                    <ScrollView>
+                        <Editor x:Name="DescriptionEditor"
+                                Text="{Binding Description, Mode=TwoWay}"
+                                HeightRequest="150"
+                                AutoSize="TextChanges"/>
+                    </ScrollView>
 
-                <!--Piltide lisamine-->
-                <Grid x:Name="PictureGrid" ColumnDefinitions="Auto,*">
-                    <Label Text="Pictures:"
+                    <!--Piltide lisamine-->
+                    <Grid x:Name="PictureGrid" ColumnDefinitions="Auto,*">
+                        <Label Text="Pictures:"
                        FontSize="Small"
                        FontAttributes="Bold"
                        VerticalOptions="Center"
                        HorizontalOptions="Start"/>
-                    <Button Text="Choose Images"
+                        <Button Text="Images"
                             Grid.Column="1"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"
                             Clicked="OnPickPhotosClicked"/>
-                </Grid>
+                    </Grid>
 
-                <!-- Piltide kuvamine -->
-                <Label Text="" HeightRequest="20"/>
-                <CollectionView x:Name="ImagesCollectionView" 
-                                ItemsSource="{Binding ImageViewModel}">
+                    <!-- Piltide kuvamine -->
+                    <Label Text="" HeightRequest="20"/>
+                <CollectionView x:Name="ImagesCollectionView" ItemsSource="{Binding ImageViewModels}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="2" />
+                        <!-- 2 items per row -->
+                    </CollectionView.ItemsLayout>
+
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Orientation="Vertical">
+                            <StackLayout Orientation="Vertical" HorizontalOptions="Center">
+
+
+                                <!-- Ensure image is displayed correctly -->
                                 <Image Source="{Binding ImageSource}"
                                        Aspect="AspectFill" 
-                                       WidthRequest="500" 
-                                       HeightRequest="500"/>
-                                <Button Text="Delete"
-                                        Margin="25,10,25,25"
-                                        MaximumWidthRequest="250"/>
+                                       WidthRequest="200" 
+                                       HeightRequest="150" />
+
+                                <HorizontalStackLayout HorizontalOptions="Center"
+                                                       Margin="0,-20"
+                                                       TranslationY="-14"
+                                                       BackgroundColor="#BFFFFFFF">
+                                    <ImageButton Source="herobutton.png"
+                                                ScaleY="1.3"
+                                                HeightRequest="22"
+                                                Clicked="OnButtonClickedUpdateHero"
+                                                BackgroundColor="{Binding ButtonBackgroundColorHero}"
+                                                Padding="5,5"
+                                                HorizontalOptions="Center"
+                                                />
+                                    <!--<ImageButton Source="recycle.png"
+                                             WidthRequest="30"
+                                             HeightRequest="30"
+                                             Clicked="OnButtonClickedUpdateDelete"
+                                             BackgroundColor="{Binding ButtonBackgroundColorDelete}"
+                                             Padding="5,5"
+                                             HorizontalOptions="Center"
+                                             />-->
+                                </HorizontalStackLayout>
+
+                                <ImageButton Source="recycle.png"
+                                             Margin="0,20"
+                                             WidthRequest="30"
+                                             HeightRequest="30"
+                                             Clicked="OnButtonClickedUpdateDelete"
+                                             BackgroundColor="{Binding ButtonBackgroundColorDelete}"
+                                             Padding="5,5"
+                                             HorizontalOptions="Center"
+                                             />
+
+
                                 <BoxView HeightRequest="20"/>
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <!-- Status Label for Feedback -->
-                <Label x:Name="StatusLabel"
-                       HorizontalOptions="Center"
-                       FontSize="Small"
-                       Margin="0,0,0,0"
-                       IsVisible="False"/>
             </StackLayout>
-        </ScrollView>
-           <Grid Grid.Row="1" ColumnDefinitions="*,*"
-                 Margin="10,25">
-                <Button Text="Update"
-                        Clicked="OnUpdateButtonClicked"
-                        Grid.Column="0"/>
-                <Button Text="Back"
-                        Clicked="OnBackButtonClicked"
-                        Grid.Column="1"/> 
-           </Grid>
+            </ScrollView>
+        <StackLayout Grid.Row="1"
+                     Orientation="Horizontal"
+                     Margin="15,5,15,15"
+                     Spacing="5">
+            <!-- Status Label for Feedback -->
+            <Label x:Name="StatusLabel"
+                   HorizontalOptions="Center"
+                   FontSize="Small"
+                   Margin="0,0,0,0"
+                   IsVisible="False"/>
+
+            <Button Text="Back"
+                    BackgroundColor="{StaticResource ButtonBackground}"
+                    TextColor="{StaticResource ButtonTextColor}"
+                    Clicked="BackTravelButton_Clicked"
+                    HorizontalOptions="FillAndExpand"
+                    Command="{Binding RestoreDeletedImagesCommand}"/>
+            <!--RestoreDeletedImagesCommand asub ImageViewModelis, aga binding asub TravelViewModelis-->
+
+            <Button Text="Update"
+                    BackgroundColor="{StaticResource ButtonBackground}"
+                    TextColor="{StaticResource ButtonTextColor}"
+                    Clicked="OnUpdateButtonClicked"
+                    HorizontalOptions="FillAndExpand"
+                    Command="{Binding ConfirmDeleteImagesCommand}"/>
+            <!--ConfirmDeleteImagesCommand asub ImageViewModelis, aga binding asub TravelViewModelis-->
+        </StackLayout>
     </Grid>
 </ContentPage>

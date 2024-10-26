@@ -31,9 +31,12 @@ namespace TravelJournalApp.Models
             }
         }
 
+        public ObservableCollection<ImagePreview> imagePreviews { get; set; } = new ObservableCollection<ImagePreview>();
+
         public ListViewModel()
         {
             _databaseContext = new DatabaseContext();
+
             Travels = new ObservableCollection<TravelViewModel>();
             //LoadTravelEntries();
         }
@@ -47,14 +50,15 @@ namespace TravelJournalApp.Models
 
                 if (travels != null)
                 {
-                    // Sorteeri reisid CreatedAt omaduse alusel kahanevas järjekorras
+                    // Sort travels by CreatedAt in descending order
                     travels = travels.OrderByDescending(t => t.CreatedAt).ToList();
 
                     foreach (var travel in travels)
                     {
                         var images = await _databaseContext.GetFilteredAsync<ImageTable>(img => img.TravelJournalId == travel.Id);
 
-                        var viewModel = new TravelViewModel
+                        // Pass the database context to the TravelViewModel
+                        var viewModel = new TravelViewModel(_databaseContext)
                         {
                             Id = travel.Id,
                             Title = travel.Title,
@@ -65,6 +69,7 @@ namespace TravelJournalApp.Models
                             TravelStartDate = travel.TravelStartDate,
                             TravelEndDate = travel.TravelEndDate,
                             TravelImages = new ObservableCollection<ImageTable>(images),
+                            HeroImageFile = travel.HeroImageFile,
                             
                         };
 

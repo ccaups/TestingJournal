@@ -1,31 +1,79 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TravelJournalApp.Models"
              x:Class="TravelJournalApp.Views.TravelDeletePage"
              Title="Delete">
+
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
             <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
         </LinearGradientBrush>
     </ContentPage.Background>
-    
-    <VerticalStackLayout>
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
         <Label Text="Are you sure you want to delete this travel entry?" 
+               TextColor="{StaticResource DeleteButtonBackground}"
                HorizontalOptions="Center" 
-               VerticalOptions="CenterAndExpand"
-               Margin="25,25"/>
+               VerticalOptions="CenterAndExpand" 
+               FontSize="16" 
+               FontAttributes="Bold" 
+               Margin="15" />
 
-        <Button Text="Delete"
-                Clicked="DeleteTravelButton_Clicked"
-                BackgroundColor="#FF6347" 
-                Margin="25,25"/>
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never">
+            <StackLayout>
+                <Label Text="{Binding Title}" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center" 
+                       Margin="15" />
+                <Label Text="{Binding Description}" 
+                       FontSize="14" 
+                       HorizontalOptions="Center" 
+                       Margin="15" />
+
+                <CollectionView ItemsSource="{Binding TravelImages}" 
+                                HeightRequest="150" 
+                                Margin="15,5" 
+                                ItemsLayout="HorizontalList">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="5"
+                                   BackgroundColor="Transparent" 
+                                   HasShadow="False" 
+                                   CornerRadius="5">
+                                <Image Source="{Binding FilePath}" 
+                                       Aspect="AspectFill" 
+                                       HeightRequest="150" />
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
+
+        <StackLayout Grid.Row="2" Orientation="Horizontal"                      
+                     Margin="15,5,15,15" 
+                     Spacing="5">
 
 
-        <Button Text="Back"
-                Margin="25,25"
-                Clicked="OnBackButtonClicked"/>
-    </VerticalStackLayout>
+            <Button Text="Back" 
+                    BackgroundColor="{StaticResource ButtonBackground}"
+                    TextColor="{StaticResource ButtonTextColor}"
+                    HorizontalOptions="FillAndExpand" 
+                    Clicked="OnBackButtonClicked" />
+            <Button Text="Delete" 
+                    BackgroundColor="{StaticResource DeleteButtonBackground}" 
+                    TextColor="{StaticResource ButtonTextColor}" 
+                    HorizontalOptions="FillAndExpand" 
+                    Clicked="DeleteTravelButton_Clicked" />
+        </StackLayout>
+    </Grid>
 </ContentPage>

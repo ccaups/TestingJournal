@@ -26,183 +26,33 @@
             </Grid.RowDefinitions>
             <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">
                 <StackLayout>
-                    <!-- Travel Entry Details and Hero Image -->
-                    <Grid ColumnDefinitions="*,Auto,Auto,Auto" RowDefinitions="Auto,*" Margin="25,10">
-                        <!-- Labels and Image bindings here for SelectedTravel -->
-                        <Label Text="{Binding SelectedTravel.Title}" 
-                               Grid.Column="0"
-                               FontSize="Large" 
-                               FontAttributes="Bold" 
-                               HorizontalOptions="Start"
-                               VerticalOptions="End"/>
-                        <Label Text="{Binding SelectedTravel.TravelStartDate, StringFormat='{0:dd.MM.yyyy}'}" 
-                               Grid.Column="1"
-                               FontSize="Small" 
-                               HorizontalOptions="End"
-                               VerticalOptions="Center"
-                               TranslationY="5"/>
-                        <Label Text="-"
-                               Grid.Column="2"
-                               FontSize="Small" 
-                               HorizontalOptions="End"
-                               VerticalOptions="Center"
-                               TranslationY="4"
-                               Margin="2,0"/>
-                        <Label Text="{Binding SelectedTravel.TravelEndDate, StringFormat='{0:dd.MM.yyyy}'}" 
-                               Grid.Column="3"
-                               FontSize="Small" 
-                               HorizontalOptions="End"
-                               VerticalOptions="Center"
-                               TranslationY="5"/>
+                    <Grid HorizontalOptions="Fill" Margin="25,10" RowSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                        <Image x:Name="BigHeroImage"
-                               Grid.Row="1"
-                               Grid.ColumnSpan="4" 
-                               Aspect="AspectFill"
-                               
-                               MaximumWidthRequest="900"
-                               Source="{Binding SelectedTravel.HeroImageSource}">
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" 
-                                                      CommandParameter="{Binding SelectedTravel}" />
-                            </Image.GestureRecognizers>
-                        </Image>
-                    </Grid>
+                        <ScrollView x:Name="TitleScrollable" 
+                                     Orientation="Horizontal" 
+                                     Margin="0,0,0,0"
+                                     Padding="1,5,1,5"
+                                     HorizontalScrollBarVisibility="Never"
+                                     Grid.ColumnSpan="2">
+                            <Label Text="{Binding SelectedTravel.Title}" 
+                                        FontSize="Medium" 
+                                        FontAttributes="Bold"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="End"/>
+                        </ScrollView>
 
-                    <!-- CollectionView for Travels -->
-                    <CollectionView x:Name="TravelsListView" 
-                                    ItemsSource="{Binding Travels}"
-                                    SelectedItem="{Binding SelectedTravel, Mode=TwoWay}"
-                                    ItemsLayout="HorizontalList"
-                                    Margin="25,0">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout Orientation="Horizontal" Padding="5,0,5,0">
-                                    <Grid RowDefinitions="Auto,*" VerticalOptions="Center">
-                                        <Label Text="{Binding Title}" 
-                                               FontSize="Small" 
-                                               FontAttributes="None" 
-                                               HorizontalOptions="Start"
-                                               VerticalOptions="Center"
-                                               Grid.Row="0"/>
-                                        <Image x:Name="ListHeroImage"
-                                               Aspect="AspectFill"
-                                               HeightRequest="125"
-                                               WidthRequest="125"
-                                               Source="{Binding HeroImageSource}"
-                                               Grid.Row="1">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding NavigateToBigHeroCommand}" CommandParameter="{Binding .}" />
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                    </Grid>
-                                </StackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
-                    <!-- Empty State Message -->
-                    <Label Text="No travel entries found. Please add a new entry."
-                           Margin="25,25"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           IsVisible="{Binding Travels.Count, Converter={StaticResource CountToVisibilityConverter}}" />
-
-                </StackLayout>
-            </ScrollView>
-            <Grid Grid.Row="1" 
-              Margin="10,25"
-                  >
-                <Button MaximumWidthRequest="500"
-                        Text="Add New Travel"
-                        Clicked="Add_Travel_Clicked" />
-            </Grid>
-        </Grid>
-    </ContentPage.Content>
-</ContentPage>
-
-    <!--Code before DeleteView:-->
-    
-    
-<!--<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:TravelJournalApp.Models"
-             xmlns:converters="clr-namespace:TravelJournalApp.Converters"
-             x:Class="TravelJournalApp.Views.TravelMainPage">
-
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            --><!-- Converter for checking if there are any travel entries. --><!--
-            <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
-    <ContentPage.Background>
-
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
-            <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
-
-    <ContentPage.Content>
-        <Grid>
-            <ScrollView>
-                <StackLayout>
-                    <Grid ColumnDefinitions="*,Auto,Auto,Auto" RowDefinitions="Auto,*" Margin="25,10">
-                        --><!-- VisualStateManager is applied here, inside Grid --><!--
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="WindowSizeStates">
-                                <VisualState x:Name="Mobile">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="0" />
-                                    </VisualState.StateTriggers>
-                                    <VisualState.Setters>
-                                        <Setter TargetName="BigHeroImage" Property="HeightRequest" Value="300" />
-                                        --><!-- Moved this ItemsLayout Setter to the correct CollectionView --><!--
-                                    </VisualState.Setters>
-                                </VisualState>
-                                <VisualState x:Name="Desktop">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="600" />
-                                    </VisualState.StateTriggers>
-                                    <VisualState.Setters>
-                                        <Setter TargetName="BigHeroImage" Property="HeightRequest" Value="500" />
-                                        --><!-- Moved this ItemsLayout Setter to the correct CollectionView --><!--
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-
-                        --><!-- Labels and Image definitions --><!--
-                        <Label Text="{Binding SelectedTravel.Title}" 
-                               Grid.Column="0"
-                               FontSize="Large" 
-                               FontAttributes="Bold" 
-                               HorizontalOptions="Start"
-                               VerticalOptions="End"/>
-
-                        <Label Text="{Binding SelectedTravel.TravelStartDate, StringFormat='{0:dd.MM.yyyy}'}" 
-                               Grid.Column="1"
-                               FontSize="Small" 
-                               HorizontalOptions="End"
-                               VerticalOptions="Center"
-                               TranslationY="5"/>
-                        <Label Text="-"
-                               Grid.Column="2"
-                               FontSize="Small" 
-                               HorizontalOptions="End"
-                               VerticalOptions="Center"
-                               TranslationY="4"
-                               Margin="2,0"/>
-                        <Label Text="{Binding SelectedTravel.TravelEndDate, StringFormat='{0:dd.MM.yyyy}'}" 
-                               Grid.Column="3"
-                               FontSize="Small" 
-                               HorizontalOptions="End"
-                               VerticalOptions="Center"
-                               TranslationY="5"/>
-
-
+                        <Label Text="{Binding SelectedTravel.TravelDates}" 
+                                Grid.Column="2"
+                                
+                                FontSize="14" 
+                                HorizontalOptions="End"
+                                VerticalOptions="Center"
+                                TranslationY="5"/>
                     </Grid>
                     <Grid Margin="25,0">
                         <Image x:Name="BigHeroImage"
@@ -218,70 +68,57 @@
                         </Image>
                     </Grid>
 
-                    --><!-- Moved VisualStateManager to CollectionView for ItemsLayout handling --><!--
+                    <!-- CollectionView for Travels -->
                     <CollectionView x:Name="TravelsListView" 
                                     ItemsSource="{Binding Travels}"
                                     SelectedItem="{Binding SelectedTravel, Mode=TwoWay}"
                                     ItemsLayout="HorizontalList"
-                                    Margin="25,0">  
-
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="WindowSizeStates">
-                                <VisualState x:Name="Mobile">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="0" />
-                                    </VisualState.StateTriggers>
-                                    <VisualState.Setters>
-                                        <Setter Property="ItemsLayout" Value="HorizontalList" />
-                                        <Setter Property="HorizontalOptions" Value="Start" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                                <VisualState x:Name="Desktop">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="600" />
-                                    </VisualState.StateTriggers>
-                                    <VisualState.Setters>
-                                        <Setter Property="ItemsLayout" Value="HorizontalList" />
-                                        <Setter Property="HorizontalOptions" Value="Center" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackLayout Orientation="Horizontal" Padding="5,0,5,0">
-                                        <Grid RowDefinitions="Auto,*" VerticalOptions="Center">
-
-                                            --><!-- Title Label in the first column --><!--
-                                        <Label Text="{Binding Title}" 
-                                               FontSize="Small" 
-                                               FontAttributes="None" 
-                                               HorizontalOptions="Start"
-                                               VerticalOptions="Center"
-                                               Grid.Row="0"/>
-
-                                        --><!-- Image in the second column --><!--
+                                    Margin="20,10"
+                                    HorizontalScrollBarVisibility="Never">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Orientation="Horizontal" Padding="5,0,5,0">
+                                    <Grid RowDefinitions="Auto,*" VerticalOptions="Start">
                                         <Image x:Name="ListHeroImage"
                                                Aspect="AspectFill"
                                                HeightRequest="125"
                                                WidthRequest="125"
                                                Source="{Binding HeroImageSource}"
-                                               Grid.Row="1">
+                                               Grid.Row="0">
                                             <Image.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding NavigateToBigHeroCommand}" CommandParameter="{Binding .}" />
-                                                </Image.GestureRecognizers>
-                                            </Image>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToDetailsCommand}"
+                                                  CommandParameter="{Binding .}" />
+                                            </Image.GestureRecognizers>
 
-                                        </Grid>
-                                    </StackLayout>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    <Button Style="{StaticResource DefaultMenuButtonStyle}"
-                            Text="Add New Travel"
-                            Clicked="Add_Travel_Clicked" />
+                                        </Image>
+                                        <Label Text="{Binding Title}" 
+                                               FontSize="Small" 
+                                               FontAttributes="None" 
+                                               HorizontalOptions="Start"
+                                               VerticalOptions="Center"
+                                               Grid.Row="1"
+                                               WidthRequest="125"/>
+                                    </Grid>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <!-- Empty State Message -->
+                    <Label Text="No travel entries found. Please add a new entry."
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Margin="25,0"
+                           IsVisible="{Binding Travels.Count, Converter={StaticResource CountToVisibilityConverter}}" />
                 </StackLayout>
             </ScrollView>
+            <StackLayout Grid.Row="1" 
+                         Orientation="Horizontal" 
+                         Padding="15" 
+                         Spacing="5"
+                         HorizontalOptions="Center">
+                <Button Text="Add New Travel"
+                        Clicked="Add_Travel_Clicked" />
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
-</ContentPage>-->
+</ContentPage>

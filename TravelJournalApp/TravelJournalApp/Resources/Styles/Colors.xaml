@@ -9,6 +9,7 @@
     <Color x:Key="TextColor">#00525e</Color>
     <Color x:Key="ButtonTextColor">white</Color>
     <Color x:Key="ButtonBackground">#00525e</Color>
+    <Color x:Key="DeleteButtonBackground">#93032E</Color>
     <Color x:Key="BlueBG">#8fdecf</Color>
     <Color x:Key="YellowBG">#ece3b8</Color>
 
