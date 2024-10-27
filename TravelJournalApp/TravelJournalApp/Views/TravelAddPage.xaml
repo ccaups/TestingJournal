@@ -68,6 +68,7 @@
                             VerticalOptions="End"
                             HorizontalOptions="Start"
                             HeightRequest="30"
+                            WidthRequest="30"
                             Margin="15,0,0,0"
                             Clicked="OnPickPhotosClicked"/>
                 </Grid>
@@ -77,23 +78,28 @@
                         <DataTemplate>
                             <!-- Each Image is displayed with a selectable button to set it as Hero Image -->
                             <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
-                                <Image Source="{Binding ImageSource}"
-                                       Aspect="AspectFill" 
-                                       WidthRequest="500" 
-                                       HeightRequest="500"/>
-                                <HorizontalStackLayout HorizontalOptions="Center"
-                                                    Margin="0,-10"
-                                                    TranslationY="-25"
-                                                    BackgroundColor="#BFFFFFFF">
-                                    <ImageButton Source="herobutton.png"
-                                             ScaleY="1.3"
-                                             HeightRequest="25"
-                                             Clicked="OnButtonClickedHero"
-                                             BackgroundColor="{Binding ButtonBackgroundColorHero}"
-                                             Padding="5,5"
-                                             HorizontalOptions="Center"
-                                             />
-                                </HorizontalStackLayout>
+                                <Grid>
+                                    <Image Source="{Binding ImageSource}"
+                                           Aspect="AspectFill" 
+                                           WidthRequest="500" 
+                                           HeightRequest="500"/>
+                                    <StackLayout Orientation="Horizontal" 
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="End"
+                                                 Margin="0,0,0,5"
+                                                BackgroundColor="#BFFFFFFF">
+                                        <ImageButton Source="herobutton.png"
+                                                 ScaleY="1.3"
+                                                 HeightRequest="25"
+                                                 WidthRequest="75"
+                                                 Clicked="OnButtonClickedHero"
+                                                 BackgroundColor="{Binding ButtonBackgroundColorHero}"
+                                                 Padding="5,5"
+                                                 HorizontalOptions="Center"
+                                                 />
+                                    </StackLayout>
+                                </Grid>
+
 
                             </StackLayout>
                         </DataTemplate>

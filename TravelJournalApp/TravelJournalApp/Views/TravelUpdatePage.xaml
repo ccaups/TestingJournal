@@ -87,6 +87,7 @@
                             VerticalOptions="End"
                             HorizontalOptions="Start"
                             HeightRequest="30"
+                            WidthRequest="30"
                             Margin="15,0,0,0"
                             Clicked="OnPickPhotosClicked"/>
                     </Grid>
@@ -103,37 +104,43 @@
                         <DataTemplate>
                             <StackLayout Orientation="Vertical" HorizontalOptions="Center">
 
-                                <!-- Ensure image is displayed correctly -->
-                                <Image Source="{Binding ImageSource}"
-                                       Aspect="AspectFill" 
-                                       WidthRequest="200" 
-                                       HeightRequest="150" />
+                                <Grid WidthRequest="200" HeightRequest="150">
+                                    <!-- Display image -->
+                                    <Image Source="{Binding ImageSource}"
+                                           Aspect="AspectFill"
+                                           WidthRequest="200"
+                                           HeightRequest="150" />
 
-                                <HorizontalStackLayout HorizontalOptions="Center"
-                                                       Margin="0,-20"
-                                                       TranslationY="-14"
-                                                       BackgroundColor="#BFFFFFFF">
-                                    <ImageButton Source="herobutton.png"
-                                                ScaleY="1.3"
-                                                HeightRequest="22"
-                                                Clicked="OnButtonClickedUpdateHero"
-                                                BackgroundColor="{Binding ButtonBackgroundColorHero}"
-                                                Padding="5,5"
-                                                HorizontalOptions="Center"/>
-                                </HorizontalStackLayout>
+                                    <!-- Overlayed buttons at the bottom of the image -->
+                                    <StackLayout Orientation="Horizontal" 
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="End"
+                                                 Margin="0,0,0,5"
+                                                 BackgroundColor="#BFFFFFFF"
+                                                 Padding="0"
+                                                 HeightRequest="30"
+                                                 >
+                                        <ImageButton Source="herobutton.png"
+                                                     ScaleY="1.3"
+                                                     HeightRequest="25"
+                                                     WidthRequest="75"
+                                                     Clicked="OnButtonClickedUpdateHero"
+                                                     BackgroundColor="{Binding ButtonBackgroundColorHero}"
+                                                     HorizontalOptions="Center"
+                                                     Padding="10,0,10,0"/>
+                                        <ImageButton Source="recycle.png"
+                                                     Padding="5,0,5,0"
+                                                     WidthRequest="32"
+                                                     HeightRequest="32"
+                                                     Clicked="OnButtonClickedUpdateDelete"
+                                                     BackgroundColor="{Binding ButtonBackgroundColorDelete}"
+                                                     HorizontalOptions="Center"/>
+                                    </StackLayout>
+                                </Grid>
 
-                                <ImageButton Source="recycle.png"
-                                             Margin="0,20"
-                                             WidthRequest="30"
-                                             HeightRequest="30"
-                                             Clicked="OnButtonClickedUpdateDelete"
-                                             BackgroundColor="{Binding ButtonBackgroundColorDelete}"
-                                             Padding="5,5"
-                                             HorizontalOptions="Center"
-                                             />
-
-                                    <BoxView HeightRequest="20"/>
+                                <BoxView HeightRequest="20" />
                             </StackLayout>
+
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
