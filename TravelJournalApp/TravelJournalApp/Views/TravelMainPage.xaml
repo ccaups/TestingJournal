@@ -61,7 +61,7 @@
                                Aspect="AspectFill"
                                HeightRequest="500"
                                Source="{Binding SelectedTravel.HeroImageSource}">
-                            <Image.GestureRecognizers>
+                        <Image.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" 
                                               CommandParameter="{Binding SelectedTravel}" />
                             </Image.GestureRecognizers>

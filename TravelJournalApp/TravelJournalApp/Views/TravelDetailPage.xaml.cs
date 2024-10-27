@@ -180,7 +180,7 @@ public partial class TravelDetailPage : ContentPage
 	private async void OnEditButtonClicked(object sender, EventArgs e)
 	{
 		var travel = (TravelViewModel)BindingContext; // Get the current travel entry from the binding context
-		await Navigation.PushAsync(new TravelUpdatePage(travel)); // Navigate to the edit page
+        await Navigation.PushAsync(new TravelUpdatePage(travel)); // Navigate to the edit page
 	}
 
 	// Event handler for clicking the delete button to navigate to the travel delete confirmation page

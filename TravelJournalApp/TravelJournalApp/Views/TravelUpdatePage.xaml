@@ -23,7 +23,7 @@
                 <StackLayout>
 
                     <!--Pealkirja kuvamine-->
-                    <Label Text="Travel Name:"
+                    <Label Text="Title:"
                        FontSize="Small"
                        FontAttributes="Bold"
                        HorizontalOptions="Start"
@@ -35,7 +35,7 @@
                     <!--Reisi alguskuupäeva valimine-->
                     <Grid x:Name="DateGrid" ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
                         <StackLayout HorizontalOptions="Start" Grid.Column="0">
-                            <Label Text="Travel Start Date:" 
+                            <Label Text="Start Date:" 
                                VerticalOptions="Center" />
                             <DatePicker x:Name="DateStartEntry" 
                                     Format="dd.MM.yyyy" 
@@ -47,7 +47,7 @@
                         <!-- Reisi lõppkuupäeva valimine-->
                         <StackLayout HorizontalOptions="Start" Margin="20,0,0,0"
                                  Grid.Column="1">
-                            <Label Text="Travel End Date:" 
+                            <Label Text="End Date:" 
                                VerticalOptions="Center" />
                             <DatePicker x:Name="DateEndEntry" 
                                     Format="dd.MM.yyyy" 
@@ -74,18 +74,20 @@
                                 HeightRequest="150"
                                 AutoSize="TextChanges"/>
                     </ScrollView>
-
-                    <!--Piltide lisamine-->
+                
+                    <!-- Picture upload section with label and ImageButton to trigger photo picker -->
                     <Grid x:Name="PictureGrid" ColumnDefinitions="Auto,*">
                         <Label Text="Pictures:"
                        FontSize="Small"
                        FontAttributes="Bold"
                        VerticalOptions="Center"
                        HorizontalOptions="Start"/>
-                        <Button Text="Images"
+                        <ImageButton Source="photoscolor.png"
                             Grid.Column="1"
-                            VerticalOptions="Center"
-                            HorizontalOptions="Center"
+                            VerticalOptions="End"
+                            HorizontalOptions="Start"
+                            HeightRequest="30"
+                            Margin="15,0,0,0"
                             Clicked="OnPickPhotosClicked"/>
                     </Grid>
 
@@ -100,7 +102,6 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Orientation="Vertical" HorizontalOptions="Center">
-
 
                                 <!-- Ensure image is displayed correctly -->
                                 <Image Source="{Binding ImageSource}"
@@ -118,16 +119,7 @@
                                                 Clicked="OnButtonClickedUpdateHero"
                                                 BackgroundColor="{Binding ButtonBackgroundColorHero}"
                                                 Padding="5,5"
-                                                HorizontalOptions="Center"
-                                                />
-                                    <!--<ImageButton Source="recycle.png"
-                                             WidthRequest="30"
-                                             HeightRequest="30"
-                                             Clicked="OnButtonClickedUpdateDelete"
-                                             BackgroundColor="{Binding ButtonBackgroundColorDelete}"
-                                             Padding="5,5"
-                                             HorizontalOptions="Center"
-                                             />-->
+                                                HorizontalOptions="Center"/>
                                 </HorizontalStackLayout>
 
                                 <ImageButton Source="recycle.png"
@@ -140,8 +132,7 @@
                                              HorizontalOptions="Center"
                                              />
 
-
-                                <BoxView HeightRequest="20"/>
+                                    <BoxView HeightRequest="20"/>
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

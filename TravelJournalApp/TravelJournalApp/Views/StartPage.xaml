@@ -36,9 +36,10 @@
         Source="train.png"
         VerticalOptions="Start"
         HorizontalOptions="End"
+        HeightRequest="96"
         TranslationX="0"
         TranslationY="750"
-        Scale="2"/>
+        Scale="1.5"/>
         </Grid>
 
         <Grid>

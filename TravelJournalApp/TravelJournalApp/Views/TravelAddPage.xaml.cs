@@ -12,27 +12,26 @@ namespace TravelJournalApp.Views
     {
         private readonly DatabaseContext _databaseContext;
         private TravelJournalTable travelJournal;
-        private List<string> selectedTempImagePaths = new List<string>(); // Temporary images path list
-        private List<string> selectedImagePaths = new List<string>(); // To store selected image paths
+        private List<string> selectedTempImagePaths = new List<string>(); // Temporary paths for selected images
+        private List<string> selectedImagePaths = new List<string>(); /// Paths for images to be saved
         public DateTime TravelStartDate { get; set; }
         public DateTime TravelEndDate { get; set; }
 
-
-
-        // Change the ObservableCollection to hold ImageOption objects
+        // ObservableCollection to hold ImageOption objects for image selection UI
         public ObservableCollection<ImageViewModel> ImageOptions{ get; set; } = new ObservableCollection<ImageViewModel>();
-        private string _heroImageFile; // Property to store the hero image file path
+        private string _heroImageFile; // Path for the selected hero image file
 
         public TravelAddPage()
         {
             InitializeComponent();
-            TravelStartDate = DateTime.Now; // Seadista TravelStartDate praegune kuupäev
-            TravelEndDate = DateTime.Now;
+            TravelStartDate = DateTime.Now; // Default start date to today
+            TravelEndDate = DateTime.Now; // Default end date to today
             BindingContext = this;
             _databaseContext = new DatabaseContext();
             travelJournal = new TravelJournalTable();
         }
 
+        // Event handler for selecting photos
         private async void OnPickPhotosClicked(object sender, EventArgs e)
         {
             try
@@ -45,26 +44,26 @@ namespace TravelJournalApp.Views
 
                 if (pickResult != null)
                 {
-                    ImageOptions.Clear(); // Clear previous selections
-                    selectedImagePaths.Clear(); // Clear previous image paths
-                    selectedTempImagePaths.Clear(); // Clear previous temp selections
+                    ImageOptions.Clear(); // Clear previous image selection
+                    selectedImagePaths.Clear(); // Reset saved image paths
+                    selectedTempImagePaths.Clear(); // Reset temporary image paths
 
                     foreach (var image in pickResult)
                     {
-                        // Store the temporary image path
+                        // Store temporary image path
                         selectedTempImagePaths.Add(image.FullPath);
 
-                        // Create an ImageViewModel for each image
-                        var imageViewModel = new ImageViewModel(ImageOptions, _databaseContext) // Loo ImageViewModel objekt
+                        // Create an ImageViewModel instance for each image
+                        var imageViewModel = new ImageViewModel(ImageOptions, _databaseContext)
                         {
                             FilePath = image.FullPath,
                             ImageSource = ImageSource.FromFile(image.FullPath),
                             IsHeroImage = false // Default to not selected as hero image
                         };
-                        ImageOptions.Add(imageViewModel);
+                        ImageOptions.Add(imageViewModel); // Add to collection for display
                     }
 
-                    // Update the UI with the new ImageOptions
+                    // Set CollectionView's item source to updated ImageOptions collection
                     ImagesCollectionView.ItemsSource = ImageOptions;
                 }
             }
@@ -74,6 +73,7 @@ namespace TravelJournalApp.Views
             }
         }
 
+        // Event handler to save the travel entry
         private async void SaveTravelClicked(object sender, EventArgs e)
         {
             var title = TitleEntry.Text?.Trim();
@@ -82,35 +82,39 @@ namespace TravelJournalApp.Views
             var startDate = DateStartEntry.Date;
             var endDate = DateEndEntry.Date;
 
-            // Validate title
+            // Validate title input
             if (string.IsNullOrWhiteSpace(title))
             {
                 StatusLabel.Text = "Title is required.";
                 return;
             }
 
-            // Set the hero image file path if selected
+            // Create a new folder for the images using a new GUID
+            string imageFolderName = Guid.NewGuid().ToString();
+            string imageFolderPath = Path.Combine(FileSystem.AppDataDirectory, imageFolderName);
+            Directory.CreateDirectory(imageFolderPath); // Create the folder
+
+            // Set hero image file path if selected
             foreach (var imageViewModel in ImageOptions)
             {
                 if (imageViewModel.IsHeroImage)
                 {
-                    // Construct the correct path within the AppData directory
-                    string appDataPath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(imageViewModel.FilePath));
-                    _heroImageFile = appDataPath; // Save the CORRECT hero image path
+                    // Construct the correct path within the new image folder
+                    _heroImageFile = Path.Combine(imageFolderPath, Path.GetFileName(imageViewModel.FilePath));
                     break;
                 }
             }
 
-            // Check if temporary images were selected and copy them to the app's local directory
+            // Copy selected temporary images to the new folder
             if (selectedTempImagePaths.Count > 0)
             {
                 foreach (var tempImagePath in selectedTempImagePaths)
                 {
-                    var newFilePath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(tempImagePath));
+                    var newFilePath = Path.Combine(imageFolderPath, Path.GetFileName(tempImagePath));
 
                     try
                     {
-                        // Copy the image from temp location to app folder
+                        // Copy the image from temp location to the new folder
                         File.Copy(tempImagePath, newFilePath, true);
                         selectedImagePaths.Add(newFilePath); // Add to the list of copied images
                     }
@@ -122,7 +126,7 @@ namespace TravelJournalApp.Views
                 }
             }
 
-            // Create and populate the TravelJournal entry
+            // Create and populate TravelJournal entry
             travelJournal = new TravelJournalTable
             {
                 Id = Guid.NewGuid(),
@@ -136,27 +140,27 @@ namespace TravelJournalApp.Views
                 HeroImageFile = _heroImageFile
             };
 
-            // Save travel journal entry to the database
+            // Save travel journal entry to database
             bool journalSaved = await _databaseContext.AddItemAsync(travelJournal);
             bool imagesSaved = true;
 
-            // Save each image associated with the journal
+            // Save each image in the journal entry
             for (int indexImages = 0; indexImages < selectedImagePaths.Count; indexImages++)
             {
-                var newFilePath = selectedImagePaths[indexImages]; // Already copied to AppDataDirectory
+                var newFilePath = selectedImagePaths[indexImages]; // Use the saved path in the new folder
 
                 var travelJournalImage = new ImageTable
                 {
                     Id = Guid.NewGuid(),
                     TravelJournalId = travelJournal.Id,
-                    FilePath = newFilePath, // Use the saved path in the local folder
+                    FilePath = newFilePath, // Save the new path in the database
                     ImageIndex = indexImages
                 };
 
                 imagesSaved &= await _databaseContext.AddItemAsync(travelJournalImage);
             }
 
-            // Update UI based on whether the save was successful
+            // Update UI based on save result
             if (journalSaved && imagesSaved)
             {
                 StatusLabel.Text = "Travel saved successfully!";
@@ -174,6 +178,7 @@ namespace TravelJournalApp.Views
         }
 
 
+        // Method to clear input fields after saving or resetting
         private void ClearInputs()
         {
             TitleEntry.Text = string.Empty;
@@ -185,8 +190,9 @@ namespace TravelJournalApp.Views
             ImageOptions.Clear();
         }
 
-        private bool _isUpdating = false; // Temporary flag to avoid recursion
+        private bool _isUpdating = false; // Flag to prevent recursion during updates
 
+        // Event handler to toggle hero image selection on button click
         private void OnButtonClickedHero(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is ImageViewModel selectedImage)
@@ -199,7 +205,7 @@ namespace TravelJournalApp.Views
                     {
                         image.IsHeroImage = false;
                     }
-                    // Värskenda ka teiste nuppude värvi:
+                    // Update button color for other images
                     image.OnPropertyChanged(nameof(image.ButtonBackgroundColorHero));
                 }
 
@@ -207,12 +213,13 @@ namespace TravelJournalApp.Views
             }
         }
 
-
+        // Scroll to the end of DescriptionEditor upon text change
         private async void DescriptionEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
             await MyScrollView.ScrollToAsync(DescriptionEditor, ScrollToPosition.End, true);
         }
 
+        // Event handler for back navigation
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PopAsync();

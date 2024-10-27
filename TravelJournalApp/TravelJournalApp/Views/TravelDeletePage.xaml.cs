@@ -30,11 +30,37 @@ namespace TravelJournalApp.Views
         {
             try
             {
+                // Get all images associated with the travel entry
                 var images = await _dbContext.GetFilteredAsync<ImageTable>(img => img.TravelJournalId == _travelViewModel.Id);
+
+                // Store the folder path based on the first image's file path
+                string folderPath = null;
+
                 foreach (var image in images)
                 {
+                    // Delete the image record from the database
                     await _dbContext.DeleteItemAsync(image);
+
+                    // Delete the image file from the file system
+                    if (File.Exists(image.FilePath))
+                    {
+                        File.Delete(image.FilePath);
+
+                        // Set folderPath based on the current image file path
+                        folderPath = Path.GetDirectoryName(image.FilePath);
+                    }
                 }
+
+                // After deleting all images, check if the folder is empty and delete it
+                if (!string.IsNullOrWhiteSpace(folderPath) && Directory.Exists(folderPath))
+                {
+                    var files = Directory.GetFiles(folderPath);
+                    if (files.Length == 0) // Only delete if the folder is empty
+                    {
+                        Directory.Delete(folderPath);
+                    }
+                }
+
                 return true;
             }
             catch (Exception ex)
@@ -44,6 +70,7 @@ namespace TravelJournalApp.Views
                 return false;
             }
         }
+
 
         private async Task<bool> DeleteTravelEntryAsync()
         {
@@ -85,11 +112,15 @@ namespace TravelJournalApp.Views
                 return;
             }
 
+            // Assuming that the images are stored in a folder associated with the travel entry
+            string imageFolderPath = Path.GetDirectoryName(_travelViewModel.HeroImageFile) ?? string.Empty; // Adjust as necessary
+
             if (!await DeleteImagesAsync() || !await DeleteTravelEntryAsync())
             {
                 await Application.Current.MainPage.DisplayAlert("Error", "Failed to delete travel entry.", "OK");
                 return;
             }
+
 
             // Notify other pages to refresh
             MessagingCenter.Send(this, "RefreshTravelEntries");

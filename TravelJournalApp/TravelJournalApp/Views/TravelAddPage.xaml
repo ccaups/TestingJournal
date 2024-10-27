@@ -18,6 +18,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!-- Scrollable content section for user input, placed in the first row of the Grid -->
         <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never"
                     x:Name="MyScrollView"
                     HorizontalScrollBarVisibility="Never">
@@ -27,7 +28,7 @@
                 <Label Text="Title:" />
                 <Entry x:Name="TitleEntry" Placeholder="Enter title" />
 
-                <!-- Date Grid -->
+                <!-- Date Entry Grid with Start and End Date Pickers -->
                 <Grid x:Name="DateGrid" ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
                     <StackLayout HorizontalOptions="Start" Grid.Column="0">
                         <Label Text="Start Date:" VerticalOptions="Center" />
@@ -51,11 +52,11 @@
                 <Label Text="Location:" />
                 <Entry x:Name="LocationEntry" Placeholder="Enter location" />
 
-                <!-- Description Editor -->
+                <!-- Description Editor for additional travel notes -->
                 <Label Text="Description:" />
                 <Editor x:Name="DescriptionEditor" Placeholder="Enter description" Margin="0,0,0,15"/>
 
-                <!--Piltide lisamine-->
+                <!-- Picture upload section with label and ImageButton to trigger photo picker -->
                 <Grid x:Name="PictureGrid" ColumnDefinitions="Auto,*">
                     <Label Text="Pictures:"
                        FontSize="Small"
@@ -74,6 +75,7 @@
                 <CollectionView x:Name="ImagesCollectionView">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
+                            <!-- Each Image is displayed with a selectable button to set it as Hero Image -->
                             <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
                                 <Image Source="{Binding ImageSource}"
                                        Aspect="AspectFill" 
@@ -92,14 +94,7 @@
                                              HorizontalOptions="Center"
                                              />
                                 </HorizontalStackLayout>
-                                <!--<Button Text="{Binding ButtonLabelHero}" 
-                                        BackgroundColor="{Binding ButtonBackgroundColorHero}"
-                                        HorizontalOptions="Center" 
-                                        VerticalOptions="Center"
-                                        Clicked="OnButtonClickedHero"
-                                        Margin="0,-15"
-                                        TranslationY="-50"/>-->
-                                
+
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -107,6 +102,7 @@
             </VerticalStackLayout>
         </ScrollView>
 
+        <!-- Status Label and Activity Indicator for saving feedback, in the second row of the Grid -->
         <StackLayout Grid.Row="1" Orientation="Horizontal" Padding="15" Spacing="5" HorizontalOptions="Center">
             <Grid RowDefinitions="*,Auto">
                 <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
@@ -124,6 +120,8 @@
                 </Grid>
             </Grid>
         </StackLayout>
+
+        <!-- Footer section with Back and Add buttons in the third row of the Grid -->
         <StackLayout Grid.Row="2" 
                      Orientation="Horizontal" 
                      Margin="15,5,15,15" 
@@ -131,9 +129,6 @@
             <Button Text="Back"
                     HorizontalOptions="FillAndExpand" 
                     Clicked="OnBackButtonClicked"/>
-            <!--<Button Text="Images"
-                    HorizontalOptions="FillAndExpand" 
-                    Clicked="OnPickPhotosClicked"/>-->
             <Button Text="Add"  
                     HorizontalOptions="FillAndExpand" 
                     Clicked="SaveTravelClicked"/>
